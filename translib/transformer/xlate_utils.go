@@ -564,7 +564,7 @@ func getDBOptions(dbNo db.DBNum) db.Options {
 	switch dbNo {
 	case db.ApplDB, db.CountersDB:
 		opt = getDBOptionsWithSeparator(dbNo, "", ":", ":")
-	case db.FlexCounterDB, db.AsicDB, db.LogLevelDB, db.ConfigDB, db.StateDB, db.ErrorDB, db.UserDB:
+	case db.FlexCounterDB, db.AsicDB, db.ConfigDB, db.StateDB, db.ErrorDB, db.UserDB:
 		opt = getDBOptionsWithSeparator(dbNo, "", "|", "|")
 	}
 
@@ -2366,11 +2366,11 @@ func (inPm XfmrParams) String() string {
 	return fmt.Sprintf("{oper: %v, uri: %v, requestUri: %v, queryParams: %v, "+
 		"DB Name at current node: %v, table: %v, key: %v, dbDataMap: %v, subOpDataMap: %v, yangDefValMap: %v "+
 		"skipOrdTblChk: %v, isVirtualTbl: %v, pCascadeDelTbl: %v, "+
-		"pruneDone: %v, invokeCRUSubtreeOnce: %v}",
+		"invokeCRUSubtreeOnce: %v}",
 		inPm.oper, inPm.uri, inPm.requestUri, inPm.queryParams,
 		inPm.curDb.Name(), inPm.table, inPm.key, inPm.dbDataMap, inPm.subOpDataMap, inPm.yangDefValMap,
 		boolPtrToString(inPm.skipOrdTblChk), boolPtrToString(inPm.isVirtualTbl), inPm.pCascadeDelTbl,
-		boolPtrToString(inPm.pruneDone), boolPtrToString(inPm.invokeCRUSubtreeOnce))
+		boolPtrToString(inPm.invokeCRUSubtreeOnce))
 }
 
 func boolPtrToString(boolPtr *bool) string {
@@ -2407,4 +2407,40 @@ func (oper Operation) String() string {
 		ret = "SUBSCRIBE"
 	}
 	return ret
+}
+
+/* QP function added for build */
+// IsEnabled : Exported version. translib.common_app needs this.
+func (qp *QueryParams) IsEnabled() bool {
+	return qp.isEnabled()
+}
+func (qp *QueryParams) isEnabled() bool {
+	return (qp.depthEnabled || (qp.content != QUERY_CONTENT_ALL) || (len(qp.fields) != 0))
+}
+func (qp *QueryParams) IsContentEnabled() bool {
+	return qp.content != QUERY_CONTENT_ALL
+}
+func (ct ContentType) String() string {
+	ret := "Unknown"
+	switch ct {
+	case QUERY_CONTENT_ALL:
+		ret = "ALL"
+	case QUERY_CONTENT_CONFIG:
+		ret = "CONFIG"
+	case QUERY_CONTENT_NONCONFIG:
+		ret = "NONCONFIG"
+	case QUERY_CONTENT_OPERATIONAL:
+		ret = "OPERATIONAL"
+	}
+	return ret
+}
+func (qp QueryParams) String() string {
+	qp_ptr := &qp
+	if qp_ptr.isEnabled() {
+		return fmt.Sprintf("QueryParams{depthEnabled: %v, curDepth: %v, content: %v, fields: %v, fieldsFillAll: %v, "+
+			"allowFieldsXpath: %v, tgtFieldsXpathMap: %v}", qp.depthEnabled, qp.curDepth, qp.content,
+			qp.fields, qp.fieldsFillAll, qp.allowFieldsXpath, qp.tgtFieldsXpathMap)
+	} else {
+		return ""
+	}
 }
