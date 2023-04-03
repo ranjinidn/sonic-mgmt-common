@@ -1,0 +1,270 @@
+module openconfig-telemetry-annot {
+
+    yang-version "1";
+
+    namespace "http://openconfig.net/yang/annotation/oc-telemetry-annot";
+    prefix "oc-telemetry-annot";
+
+    import sonic-extensions { prefix sonic-ext; }
+    import openconfig-inet-types { prefix oc-inet; }
+    import openconfig-extensions { prefix oc-ext; }
+    import openconfig-telemetry-types { prefix oc-telemetry-types; }
+    import openconfig-telemetry { prefix oc-telemetry; }
+
+
+    deviation /oc-telemetry:telemetry-system {
+      deviate add {
+          sonic-ext:user-role-priv "write:netadmin";
+      }
+    }
+
+    deviation /oc-telemetry:telemetry-system {
+      deviate add {
+          sonic-ext:post-transformer "telemetry_system_post_xfmr";
+      }
+    }
+
+    deviation /oc-telemetry:telemetry-system/oc-telemetry:subscriptions/oc-telemetry:persistent-subscriptions {
+      deviate add {
+          sonic-ext:table-name "DIALOUT_PERSISTENT_SUBSCRIPTION";
+      }
+    }
+
+    deviation /oc-telemetry:telemetry-system/oc-telemetry:subscriptions/oc-telemetry:persistent-subscriptions/oc-telemetry:persistent-subscription {
+      deviate add {
+          sonic-ext:key-transformer "persistent_subscription_key_xfmr";
+      }
+    }
+
+    deviation /oc-telemetry:telemetry-system/oc-telemetry:subscriptions/oc-telemetry:persistent-subscriptions/oc-telemetry:persistent-subscription/oc-telemetry:config/oc-telemetry:name {
+      deviate add {
+          sonic-ext:field-transformer "name_field_xfmr";  
+      }
+    }
+
+    deviation /oc-telemetry:telemetry-system/oc-telemetry:subscriptions/oc-telemetry:persistent-subscriptions/oc-telemetry:persistent-subscription/oc-telemetry:state/oc-telemetry:name {
+      deviate add {
+          sonic-ext:field-transformer "name_field_xfmr";
+      }
+    }
+
+    deviation /oc-telemetry:telemetry-system/oc-telemetry:subscriptions/oc-telemetry:persistent-subscriptions/oc-telemetry:persistent-subscription/oc-telemetry:config/oc-telemetry:local-source-address {
+      deviate add {
+          sonic-ext:field-name "local_source_address";
+      }
+    }
+
+    deviation /oc-telemetry:telemetry-system/oc-telemetry:subscriptions/oc-telemetry:persistent-subscriptions/oc-telemetry:persistent-subscription/oc-telemetry:state/oc-telemetry:local-source-address {
+      deviate add {
+          sonic-ext:field-name "local_source_address";
+      }
+    }
+
+    deviation /oc-telemetry:telemetry-system/oc-telemetry:subscriptions/oc-telemetry:persistent-subscriptions/oc-telemetry:persistent-subscription/oc-telemetry:config/oc-telemetry:originated-qos-marking {
+      deviate add {
+          sonic-ext:field-name "originated_qos_marking";
+      }
+    }
+
+    deviation /oc-telemetry:telemetry-system/oc-telemetry:subscriptions/oc-telemetry:persistent-subscriptions/oc-telemetry:persistent-subscription/oc-telemetry:state/oc-telemetry:originated-qos-marking {
+      deviate add {
+          sonic-ext:field-name "originated_qos_marking";
+      }
+    }
+
+    deviation /oc-telemetry:telemetry-system/oc-telemetry:subscriptions/oc-telemetry:persistent-subscriptions/oc-telemetry:persistent-subscription/oc-telemetry:sensor-profiles {
+      deviate add {
+          sonic-ext:table-name "DIALOUT_SUBSCR_SENSOR_PROFILE";          
+      }
+    }
+
+    deviation /oc-telemetry:telemetry-system/oc-telemetry:subscriptions/oc-telemetry:persistent-subscriptions/oc-telemetry:persistent-subscription/oc-telemetry:sensor-profiles/oc-telemetry:sensor-profile {
+      deviate add {
+          sonic-ext:key-transformer "sensor_profile_key_xfmr";
+      }
+    }
+
+    deviation /oc-telemetry:telemetry-system/oc-telemetry:subscriptions/oc-telemetry:persistent-subscriptions/oc-telemetry:persistent-subscription/oc-telemetry:sensor-profiles/oc-telemetry:sensor-profile/oc-telemetry:config/oc-telemetry:suppress-redundant {
+      deviate add {
+          sonic-ext:field-name "suppress_redundant";
+      }
+    }
+
+    deviation /oc-telemetry:telemetry-system/oc-telemetry:subscriptions/oc-telemetry:persistent-subscriptions/oc-telemetry:persistent-subscription/oc-telemetry:sensor-profiles/oc-telemetry:sensor-profile/oc-telemetry:state/oc-telemetry:suppress-redundant {
+      deviate add {
+          sonic-ext:field-name "suppress_redundant";
+      }
+    }
+
+    deviation /oc-telemetry:telemetry-system/oc-telemetry:subscriptions/oc-telemetry:persistent-subscriptions/oc-telemetry:persistent-subscription/oc-telemetry:sensor-profiles/oc-telemetry:sensor-profile/oc-telemetry:config/oc-telemetry:sample-interval {
+      deviate add {
+          sonic-ext:field-name "sample_interval";
+      }
+    }
+
+    deviation /oc-telemetry:telemetry-system/oc-telemetry:subscriptions/oc-telemetry:persistent-subscriptions/oc-telemetry:persistent-subscription/oc-telemetry:sensor-profiles/oc-telemetry:sensor-profile/oc-telemetry:state/oc-telemetry:sample-interval {
+      deviate add {
+          sonic-ext:field-name "sample_interval";
+      }
+    }
+
+    deviation /oc-telemetry:telemetry-system/oc-telemetry:subscriptions/oc-telemetry:persistent-subscriptions/oc-telemetry:persistent-subscription/oc-telemetry:sensor-profiles/oc-telemetry:sensor-profile/oc-telemetry:config/oc-telemetry:sensor-group {
+      deviate add {
+          sonic-ext:field-transformer "sensor_group_field_xfmr";
+      }
+    }
+
+    deviation /oc-telemetry:telemetry-system/oc-telemetry:subscriptions/oc-telemetry:persistent-subscriptions/oc-telemetry:persistent-subscription/oc-telemetry:sensor-profiles/oc-telemetry:sensor-profile/oc-telemetry:state/oc-telemetry:sensor-group {
+      deviate add {
+          sonic-ext:field-transformer "sensor_group_field_xfmr";
+      }
+    }
+
+    deviation /oc-telemetry:telemetry-system/oc-telemetry:subscriptions/oc-telemetry:persistent-subscriptions/oc-telemetry:persistent-subscription/oc-telemetry:sensor-profiles/oc-telemetry:sensor-profile/oc-telemetry:config/oc-telemetry:heartbeat-interval {
+      deviate add {
+          sonic-ext:field-name "heartbeat_interval";
+      }
+    }
+
+    deviation /oc-telemetry:telemetry-system/oc-telemetry:subscriptions/oc-telemetry:persistent-subscriptions/oc-telemetry:persistent-subscription/oc-telemetry:sensor-profiles/oc-telemetry:sensor-profile/oc-telemetry:state/oc-telemetry:heartbeat-interval {
+      deviate add {
+          sonic-ext:field-name "heartbeat_interval";
+      }
+    }
+
+    deviation /oc-telemetry:telemetry-system/oc-telemetry:subscriptions/oc-telemetry:persistent-subscriptions/oc-telemetry:persistent-subscription/oc-telemetry:destination-groups {
+      deviate add {
+          sonic-ext:table-name "DIALOUT_SUBSCR_DESTINATION_GROUP";
+      }
+    }
+
+    deviation /oc-telemetry:telemetry-system/oc-telemetry:subscriptions/oc-telemetry:persistent-subscriptions/oc-telemetry:persistent-subscription/oc-telemetry:destination-groups/oc-telemetry:destination-group {
+      deviate add {
+          sonic-ext:key-transformer "subscr_destination_key_xfmr";
+      }
+    }
+
+    deviation /oc-telemetry:telemetry-system/oc-telemetry:subscriptions/oc-telemetry:persistent-subscriptions/oc-telemetry:persistent-subscription/oc-telemetry:destination-groups/oc-telemetry:destination-group/oc-telemetry:config/oc-telemetry:group-id {
+      deviate add {
+          sonic-ext:field-transformer "subscr_group_id_field_xfmr";
+      }
+    }
+
+    deviation /oc-telemetry:telemetry-system/oc-telemetry:subscriptions/oc-telemetry:persistent-subscriptions/oc-telemetry:persistent-subscription/oc-telemetry:destination-groups/oc-telemetry:destination-group/oc-telemetry:state/oc-telemetry:group-id {
+      deviate add {
+          sonic-ext:field-transformer "subscr_group_id_field_xfmr";
+      }
+    }
+
+    deviation /oc-telemetry:telemetry-system/oc-telemetry:sensor-groups {
+      deviate add {
+          sonic-ext:table-name "DIALOUT_SENSOR_GROUP";
+      }
+    }
+
+    deviation /oc-telemetry:telemetry-system/oc-telemetry:sensor-groups/oc-telemetry:sensor-group {
+      deviate add {
+          sonic-ext:key-transformer "sensor_group_key_xfmr";
+      }
+    }
+
+    deviation /oc-telemetry:telemetry-system/oc-telemetry:sensor-groups/oc-telemetry:sensor-group/oc-telemetry:sensor-paths {
+      deviate add {
+          sonic-ext:table-name "DIALOUT_SENSOR_PATH";
+      }
+    }
+
+    deviation /oc-telemetry:telemetry-system/oc-telemetry:sensor-groups/oc-telemetry:sensor-group/oc-telemetry:sensor-paths/oc-telemetry:sensor-path {
+      deviate add {
+          sonic-ext:key-transformer "sensor_path_key_xfmr";
+      }
+    }
+
+    deviation /oc-telemetry:telemetry-system/oc-telemetry:sensor-groups/oc-telemetry:sensor-group/oc-telemetry:sensor-paths/oc-telemetry:sensor-path/oc-telemetry:config/oc-telemetry:path {
+      deviate add {
+          sonic-ext:field-transformer "path_field_xfmr";
+      }
+    }
+
+    deviation /oc-telemetry:telemetry-system/oc-telemetry:sensor-groups/oc-telemetry:sensor-group/oc-telemetry:sensor-paths/oc-telemetry:sensor-path/oc-telemetry:state/oc-telemetry:path {
+      deviate add {
+          sonic-ext:field-transformer "path_field_xfmr";
+      }
+    }
+
+    deviation /oc-telemetry:telemetry-system/oc-telemetry:sensor-groups/oc-telemetry:sensor-group/oc-telemetry:config/oc-telemetry:sensor-group-id {
+      deviate add {
+          sonic-ext:field-transformer "sensor_group_id_field_xfmr";
+      }
+    }
+    
+    deviation /oc-telemetry:telemetry-system/oc-telemetry:sensor-groups/oc-telemetry:sensor-group/oc-telemetry:state/oc-telemetry:sensor-group-id {
+      deviate add {
+          sonic-ext:field-transformer "sensor_group_id_field_xfmr";
+      }
+    }    
+
+    deviation /oc-telemetry:telemetry-system/oc-telemetry:destination-groups {
+      deviate add {
+          sonic-ext:table-name "DIALOUT_DESTINATION_GROUP";
+      }
+    }
+
+    deviation /oc-telemetry:telemetry-system/oc-telemetry:destination-groups/oc-telemetry:destination-group {
+      deviate add {
+          sonic-ext:key-transformer "destination_group_key_xfmr";
+      }
+    }
+
+    deviation /oc-telemetry:telemetry-system/oc-telemetry:destination-groups/oc-telemetry:destination-group/oc-telemetry:destinations {
+      deviate add {
+          sonic-ext:table-name "DIALOUT_DESTINATION";
+      }
+    }
+
+    deviation /oc-telemetry:telemetry-system/oc-telemetry:destination-groups/oc-telemetry:destination-group/oc-telemetry:destinations/oc-telemetry:destination {
+      deviate add {
+          sonic-ext:key-transformer "destination_key_xfmr";
+      }
+    }
+    
+    deviation /oc-telemetry:telemetry-system/oc-telemetry:destination-groups/oc-telemetry:destination-group/oc-telemetry:config/oc-telemetry:group-id {
+      deviate add {
+          sonic-ext:field-transformer "group_id_field_xfmr";
+      }
+    }
+
+    deviation /oc-telemetry:telemetry-system/oc-telemetry:destination-groups/oc-telemetry:destination-group/oc-telemetry:state/oc-telemetry:group-id {
+      deviate add {
+          sonic-ext:field-transformer "group_id_field_xfmr";
+      }
+    }
+
+    deviation /oc-telemetry:telemetry-system/oc-telemetry:destination-groups/oc-telemetry:destination-group/oc-telemetry:destinations/oc-telemetry:destination/oc-telemetry:config/oc-telemetry:destination-port {
+      deviate add {
+          sonic-ext:field-transformer "destination_port_field_xfmr";
+      }
+    }
+
+    deviation /oc-telemetry:telemetry-system/oc-telemetry:destination-groups/oc-telemetry:destination-group/oc-telemetry:destinations/oc-telemetry:destination/oc-telemetry:state/oc-telemetry:destination-port {
+      deviate add {
+          sonic-ext:field-transformer "destination_port_field_xfmr";
+      }
+    }
+
+    deviation /oc-telemetry:telemetry-system/oc-telemetry:destination-groups/oc-telemetry:destination-group/oc-telemetry:destinations/oc-telemetry:destination/oc-telemetry:config/oc-telemetry:destination-address {
+      deviate add {
+          sonic-ext:field-transformer "destination_address_field_xfmr";
+      }
+    }
+
+    deviation /oc-telemetry:telemetry-system/oc-telemetry:destination-groups/oc-telemetry:destination-group/oc-telemetry:destinations/oc-telemetry:destination/oc-telemetry:state/oc-telemetry:destination-address {
+      deviate add {
+          sonic-ext:field-transformer "destination_address_field_xfmr";
+      }
+    }
+
+    deviation /oc-telemetry:telemetry-system/oc-telemetry:subscriptions/oc-telemetry:dynamic-subscriptions {
+      deviate not-supported;
+    }
+}
