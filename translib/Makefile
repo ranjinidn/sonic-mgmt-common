@@ -21,12 +21,15 @@ TRANSLIB_TEST_DIR  = $(BUILD_DIR)/tests/translib
 TRANSLIB_TEST_BIN  = $(TRANSLIB_TEST_DIR)/translib.test
 TRANSL_DB_TEST_BIN = $(TRANSLIB_TEST_DIR)/db.test
 
+TRANSFORMER_TEST_BIN = $(TRANSLIB_TEST_DIR)/transformer.test
+TRANSFORMER_ALL_SRCS = $(filter ./transformer/%, $(SRCS) $(TESTS))
+
 YANG_FILES = $(shell find $(TOPDIR)/models/yang -name '*.yang')
 YGOT_BINDS = ocbinds/ocbinds.go
 
 DEFAULT_TARGETS = $(YGOT_BINDS)
 ifeq ($(NO_TEST_BINS),)
-DEFAULT_TARGETS += $(TRANSLIB_TEST_BIN) $(TRANSL_DB_TEST_BIN)
+DEFAULT_TARGETS += $(TRANSLIB_TEST_BIN) $(TRANSL_DB_TEST_BIN) $(TRANSFORMER_TEST_BIN) 
 endif
 
 default: $(DEFAULT_TARGETS)
@@ -41,6 +44,10 @@ $(TRANSLIB_TEST_BIN): $(TRANSLIB_MAIN_SRCS) $(TRANSLIB_TEST_SRCS) $(YGOT_BINDS)
 
 $(TRANSL_DB_TEST_BIN) : $(TRANSL_DB_ALL_SRCS)
 	$(GO) test -mod=vendor -cover -c ../translib/db -o $@
+
+$(TRANSFORMER_TEST_BIN): $(TRANSFORMER_ALL_SRCS) $(TRANSLIB_MAIN_SRCS) $(YGOT_BINDS)
+	mkdir -p $(@D)/testdata && cp -r transformer/testdata/*.json $(@D)/testdata
+	$(GO) test -mod=vendor -c -vet=off -cover -coverpkg=../translib/transformer ../translib/transformer -o $@
 
 $(YGOT_BINDS): $(YANG_FILES)
 	$(RM) $@
