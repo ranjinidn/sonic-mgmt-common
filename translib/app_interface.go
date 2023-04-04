@@ -66,16 +66,6 @@ type appOptions struct {
 	// Valid for GET API only.
 	depth uint
 
-	// content query parameter value receved from the URI
-	// possible value is one of 'config', 'nonconfig','all','state' or 'operational'
-	// Valid for GET API only.
-	content string
-
-	//fields query parameters
-	// paths of the fields that needs to be filtered in GET payload response
-	// Valid for GET API only.
-	fields []string
-
 	// deleteEmptyEntry indicates if the db entry should be deleted upon
 	// deletion of last field. This is a non standard option.
 	deleteEmptyEntry bool
