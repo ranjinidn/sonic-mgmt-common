@@ -30,12 +30,6 @@ const (
 	OC_MDL_PFX           = "openconfig-"
 	IETF_MDL_PFX         = "ietf-"
 	IANA_MDL_PFX         = "iana-"
-
-	YANG_CONTAINER_NM_CONFIG  = "config"
-	CONFIG_CNT_SUFFIXED_XPATH = "/config"
-	STATE_CNT_SUFFIXED_XPATH  = "/state"
-	CONFIG_CNT_WITHIN_XPATH   = "/config/"
-	STATE_CNT_WITHIN_XPATH    = "/state/"
 )
 
 const (
@@ -54,18 +48,6 @@ const (
 	XFMR_DISABLE
 	XFMR_ENABLE
 	XFMR_DEFAULT_ENABLE
-)
-
-const (
-	QUERY_CONTENT_ALL ContentType = iota
-	QUERY_CONTENT_CONFIG
-	QUERY_CONTENT_NONCONFIG
-	QUERY_CONTENT_OPERATIONAL
-)
-
-const (
-	QUERY_CONTENT_MISMATCH_ERR      = "Query Parameter Content mismatch"
-	QUERY_PARAMETER_SBT_PRUNING_ERR = "Query Parameter processing unsuccessful"
 )
 
 const (

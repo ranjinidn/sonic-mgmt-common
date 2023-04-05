@@ -352,7 +352,7 @@ func sonicDbToYangDataFill(inParamsForGet xlateFromDbParams) {
 						fldName = fldName + "@"
 					}
 					curUri := inParamsForGet.uri + "/" + yangChldName
-					linParamsForGet := formXlateFromDbParams(nil, inParamsForGet.dbs, dbIdx, inParamsForGet.ygRoot, curUri, inParamsForGet.requestUri, curUri, inParamsForGet.oper, table, key, dbDataMap, inParamsForGet.txCache, resultMap, inParamsForGet.validate, inParamsForGet.queryParams)
+					linParamsForGet := formXlateFromDbParams(nil, inParamsForGet.dbs, dbIdx, inParamsForGet.ygRoot, curUri, inParamsForGet.requestUri, curUri, inParamsForGet.oper, table, key, dbDataMap, inParamsForGet.txCache, resultMap, inParamsForGet.validate)
 					dbEntry := yangNode.dbEntry.Dir[yangChldName]
 					sonicDbToYangTerminalNodeFill(fldName, linParamsForGet, dbEntry)
 					resultMap = linParamsForGet.resultMap
@@ -736,7 +736,7 @@ func yangListInstanceDataFill(inParamsForGet xlateFromDbParams, isFirstCall bool
 			inParamsForGet.ygRoot = ygRoot
 			inParamsForGet.dbDataMap = dbDataMap
 			if err != nil {
-				xfmrLogInfoAll("Error returned by %v: %v", xYangSpecMap[xpath].xfmrFunc, err)
+				xfmrLogDebug("Error returned by %v: %v", xYangSpecMap[xpath].xfmrFunc, err)
 			}
 		}
 		if xYangSpecMap[xpath].hasChildSubTree {
@@ -922,7 +922,6 @@ func yangDataFill(inParamsForGet xlateFromDbParams) error {
 	if ok && yangNode.yangEntry != nil {
 		for yangChldName := range yangNode.yangEntry.Dir {
 			chldXpath := xpath + "/" + yangChldName
-			chFieldsFillAll := inParamsForGet.queryParams.fieldsFillAll
 			if xYangSpecMap[chldXpath] != nil && xYangSpecMap[chldXpath].nameWithMod != nil {
 				chldUri = uri + "/" + *(xYangSpecMap[chldXpath].nameWithMod)
 			} else {
@@ -949,7 +948,7 @@ func yangDataFill(inParamsForGet xlateFromDbParams) error {
 					inParamsForGet.dbDataMap = dbDataMap
 					inParamsForGet.ygRoot = ygRoot
 				}
-				chldYangType := xYangSpecMap[chldXpath].yangDataType
+				chldYangType := xYangSpecMap[chldXpath].yangType
 				if chldYangType == YANG_LEAF || chldYangType == YANG_LEAF_LIST {
 					if len(xYangSpecMap[xpath].xfmrFunc) > 0 {
 						continue
@@ -1019,7 +1018,7 @@ func yangDataFill(inParamsForGet xlateFromDbParams) error {
 							inParamsForGet.dbDataMap = dbDataMap
 							inParamsForGet.ygRoot = ygRoot
 							if err != nil {
-								xfmrLogInfoAll("Error returned by %v: %v", xYangSpecMap[xpath].xfmrFunc, err)
+								xfmrLogDebug("Error returned by %v: %v", xYangSpecMap[xpath].xfmrFunc, err)
 							}
 						}
 						if !xYangSpecMap[chldXpath].hasChildSubTree {
@@ -1057,7 +1056,7 @@ func yangDataFill(inParamsForGet xlateFromDbParams) error {
 							inParams := formXfmrInputRequest(dbs[cdb], dbs, cdb, ygRoot, chldUri, requestUri, GET, "", dbDataMap, nil, nil, txCache)
 							err := xfmrHandlerFunc(inParams, xYangSpecMap[chldXpath].xfmrFunc)
 							if err != nil {
-								xfmrLogInfoAll("Error returned by %v: %v", xYangSpecMap[chldXpath].xfmrFunc, err)
+								xfmrLogDebug("Error returned by %v: %v", xYangSpecMap[chldXpath].xfmrFunc, err)
 							}
 							inParamsForGet.dbDataMap = dbDataMap
 							inParamsForGet.ygRoot = ygRoot
@@ -1082,7 +1081,7 @@ func yangDataFill(inParamsForGet xlateFromDbParams) error {
 					linParamsForGet := formXlateFromDbParams(dbs[cdb], dbs, cdb, ygRoot, chldUri, requestUri, chldXpath, inParamsForGet.oper, lTblName, xpathKeyExtRet.dbKey, dbDataMap, inParamsForGet.txCache, resultMap, inParamsForGet.validate)
 					linParamsForGet.xfmrDbTblKeyCache = inParamsForGet.xfmrDbTblKeyCache
 					linParamsForGet.dbTblKeyGetCache = inParamsForGet.dbTblKeyGetCache
-					yangListDataFill(linParamsForGet)
+					yangListDataFill(linParamsForGet, false)
 					resultMap = linParamsForGet.resultMap
 					dbDataMap = linParamsForGet.dbDataMap
 					ygRoot = linParamsForGet.ygRoot
@@ -1147,7 +1146,7 @@ func dbDataToYangJsonCreate(inParamsForGet xlateFromDbParams) (string, bool, err
 				}
 			}
 
-			yangType := yangTypeGet(yangNode.yangEntry)
+			yangType := yangNode.yangType
 			validateHandlerFlag := false
 			tableXfmrFlag := false
 			IsValidate := false

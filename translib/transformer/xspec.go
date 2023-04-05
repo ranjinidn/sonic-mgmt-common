@@ -59,8 +59,6 @@ type yangXpathInfo struct {
 	cascadeDel         int8
 	virtualTbl         *bool
 	nameWithMod        *string
-	operationalQP      bool
-	hasChildOpertnlNd  bool
 	yangType           yangElementType
 }
 
@@ -198,29 +196,6 @@ func childSubTreePresenceFlagSet(xpath string) {
 		}
 		if parXpathData, ok := xYangSpecMap[parXpath]; ok {
 			parXpathData.hasChildSubTree = true
-		}
-		parXpath = parentXpathGet(parXpath)
-	}
-}
-
-func childOperationalNodeFlagSet(xpath string) {
-	if xpathData, ok := xYangSpecMap[xpath]; ok {
-		yangType := xpathData.yangType
-		if (yangType != YANG_LEAF) && (yangType != YANG_LEAF_LIST) {
-			xpathData.hasChildOpertnlNd = true
-		}
-	}
-
-	parXpath := parentXpathGet(xpath)
-	for {
-		if parXpath == "" {
-			break
-		}
-		if parXpathData, ok := xYangSpecMap[parXpath]; ok {
-			if parXpathData.hasChildOpertnlNd {
-				break
-			}
-			parXpathData.hasChildOpertnlNd = true
 		}
 		parXpath = parentXpathGet(parXpath)
 	}
@@ -441,45 +416,6 @@ func yangToDbMapFill(keyLevel uint8, xYangSpecMap map[string]*yangXpathInfo, ent
 	}
 }
 
-/* find and set operation query parameter nodes */
-var xlateUpdateQueryParamInfo = func() {
-
-	for xpath := range xYangSpecMap {
-		if xYangSpecMap[xpath].yangEntry != nil {
-			readOnly := xYangSpecMap[xpath].yangEntry.ReadOnly()
-			/* TODO - Uncomment this line once subscription changes for memory optimization ready
-			if xYangSpecMap[xpath].yangType == YANG_LEAF || xYangSpecMap[xpath].yangType == YANG_LEAF_LIST {
-				xYangSpecMap[xpath].yangEntry = nil //memory optimization - don't cache for leafy nodes
-			}*/
-			if !readOnly {
-				continue
-			}
-		}
-
-		if strings.Contains(xpath, STATE_CNT_WITHIN_XPATH) {
-			cfgXpath := strings.Replace(xpath, STATE_CNT_WITHIN_XPATH, CONFIG_CNT_WITHIN_XPATH, -1)
-			if strings.HasSuffix(cfgXpath, STATE_CNT_SUFFIXED_XPATH) {
-				suffix_idx := strings.LastIndex(cfgXpath, STATE_CNT_SUFFIXED_XPATH)
-				cfgXpath = cfgXpath[:suffix_idx] + CONFIG_CNT_SUFFIXED_XPATH
-			}
-			if _, ok := xYangSpecMap[cfgXpath]; !ok {
-				xYangSpecMap[xpath].operationalQP = true
-				childOperationalNodeFlagSet(xpath)
-			}
-		} else if strings.HasSuffix(xpath, STATE_CNT_SUFFIXED_XPATH) {
-			suffix_idx := strings.LastIndex(xpath, STATE_CNT_SUFFIXED_XPATH)
-			cfgXpath := xpath[:suffix_idx] + CONFIG_CNT_SUFFIXED_XPATH
-			if _, ok := xYangSpecMap[cfgXpath]; !ok {
-				xYangSpecMap[xpath].operationalQP = true
-				childOperationalNodeFlagSet(xpath)
-			}
-		} else {
-			xYangSpecMap[xpath].operationalQP = true
-			childOperationalNodeFlagSet(xpath)
-		}
-	}
-}
-
 /* Build lookup table based of yang xpath */
 func yangToDbMapBuild(entries map[string]*yang.Entry) {
 	if entries == nil {
@@ -504,7 +440,6 @@ func yangToDbMapBuild(entries map[string]*yang.Entry) {
 	jsonfile := YangPath + TblInfoJsonFile
 	xlateJsonTblInfoLoad(sonicOrdTblListMap, jsonfile)
 
-	xlateUpdateQueryParamInfo()
 	sonicLeafRefMap = nil
 }
 
@@ -1097,8 +1032,6 @@ func mapPrint(fileName string) {
 			fmt.Fprintf(fp, "        %d. %#v\r\n", i, kd)
 		}
 		fmt.Fprintf(fp, "\r\n    isKey   : %v\r\n", d.isKey)
-		fmt.Fprintf(fp, "\r\n    operQP  : %v\r\n", d.operationalQP)
-		fmt.Fprintf(fp, "\r\n    hasChildOperQP  : %v\r\n", d.hasChildOpertnlNd)
 	}
 	fmt.Fprintf(fp, "-----------------------------------------------------------------\r\n")
 

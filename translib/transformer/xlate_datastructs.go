@@ -77,7 +77,6 @@ type xlateFromDbParams struct {
 	validate          bool
 	xfmrDbTblKeyCache map[string]tblKeyCache
 	dbTblKeyGetCache  map[db.DBNum]map[string]map[string]bool
-	queryParams       QueryParams
 }
 
 type xlateToParams struct {
@@ -104,37 +103,6 @@ type xlateToParams struct {
 	xfmrDbTblKeyCache       map[string]tblKeyCache
 	dbTblKeyGetCache        map[db.DBNum]map[string]map[string]bool
 	invokeCRUSubtreeOnceMap map[string]map[string]bool
-}
-
-const (
-	TRANSLIB_FMT_IETF_JSON = iota
-	TRANSLIB_FMT_YGOT
-)
-
-type ContentType uint8
-
-type QueryParams struct {
-	depthEnabled      bool
-	curDepth          uint
-	content           ContentType
-	fields            []string
-	fieldsFillAll     bool
-	allowFieldsXpath  map[string]bool
-	tgtFieldsXpathMap map[string][]string
-}
-
-type contentQPSpecMapInfo struct {
-	yangType              yangElementType
-	yangName              string
-	isReadOnly            bool
-	isOperationalNd       bool
-	hasNonTerminalNd      bool
-	hasChildOperationalNd bool
-	isOcMdl               bool
-}
-
-type qpSubtreePruningErr struct {
-	subtreePath string
 }
 
 type Operation int
